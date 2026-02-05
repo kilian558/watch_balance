@@ -16,9 +16,8 @@ function loadEnv() {
       const [key, ...valueParts] = line.split('=');
       if (key && valueParts.length > 0) {
         const value = valueParts.join('=').trim();
-        if (!process.env[key]) {
-          process.env[key] = value;
-        }
+        // .env values override existing environment variables
+        process.env[key] = value;
       }
     }
   });
