@@ -93,6 +93,9 @@ WATCH_INTERVAL_SECS = _env_int("WATCH_BALANCE_INTERVAL_SECS", 300)
 # Bot name that will be displayed in CRCON "audit logs" and Discord embeds
 BOT_NAME = os.getenv("WATCH_BALANCE_BOT_NAME", "CRCON_watch_balance")
 
+# Server name to display in Discord embed
+SERVER_NAME = os.getenv("WATCH_BALANCE_SERVER_NAME", "HLL Server")
+
 # RCON API (HTTP)
 RCON_API_BASE_URL = os.getenv("RCON_API_BASE_URL", "").strip()
 RCON_API_TOKEN = os.getenv("RCON_API_TOKEN", "").strip()

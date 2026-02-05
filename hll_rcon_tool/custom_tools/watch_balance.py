@@ -510,14 +510,13 @@ def build_embed(all_teams: list, all_players: list) -> Optional[discord.Embed]:
 
     embed = discord.Embed(
         title=embed_title,
-        url=common_functions.DISCORD_EMBED_AUTHOR_URL,
         color=int(
             common_functions.green_to_red(value=avg_diff_ratio, min_value=1, max_value=2),
             base=16
         )
     )
     embed.set_author(
-        name=config.BOT_NAME,
+        name=config.SERVER_NAME,
         url=common_functions.DISCORD_EMBED_AUTHOR_URL,
         icon_url=common_functions.DISCORD_EMBED_AUTHOR_ICON_URL
     )
