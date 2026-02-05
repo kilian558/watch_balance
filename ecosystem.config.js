@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "watch-balance-s1",
       script: "hll_rcon_tool/custom_tools/watch_balance.py",
-      interpreter: process.env.PYTHON_INTERPRETER || "python",
+      interpreter: process.env.PYTHON_INTERPRETER || "python3",
       cron_restart: "30 4 * * *",
       env: {
         RCON_API_BASE_URL: process.env.RCON_API_BASE_URL_S1,
@@ -26,7 +26,7 @@ module.exports = {
     {
       name: "watch-balance-s2",
       script: "hll_rcon_tool/custom_tools/watch_balance.py",
-      interpreter: process.env.PYTHON_INTERPRETER || "python",
+      interpreter: process.env.PYTHON_INTERPRETER || "python3",
       cron_restart: "30 4 * * *",
       env: {
         RCON_API_BASE_URL: process.env.RCON_API_BASE_URL_S2,
@@ -49,7 +49,7 @@ module.exports = {
     {
       name: "watch-balance-s3",
       script: "hll_rcon_tool/custom_tools/watch_balance.py",
-      interpreter: process.env.PYTHON_INTERPRETER || "python",
+      interpreter: process.env.PYTHON_INTERPRETER || "python3",
       cron_restart: "30 4 * * *",
       env: {
         RCON_API_BASE_URL: process.env.RCON_API_BASE_URL_S3,
