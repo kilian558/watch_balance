@@ -10,7 +10,11 @@ It posts a single embed per channel and edits it on updates to avoid spam.
 - PM2 (optional, for process management and scheduled restarts)
 
 ## Setup
-1) Install dependencies used by your CRCON environment.
+1) Run the setup script to create a virtual environment and install dependencies:
+   ```bash
+   chmod +x setup.sh
+   ./setup.sh
+   ```
 2) Copy `.env.example` to `.env`: `cp .env.example .env`
 3) Edit `.env` and configure your Discord bot token, RCON API credentials, and server URLs.
 4) Start with PM2.
