@@ -581,6 +581,10 @@ async def send_or_edit_embed(channel: discord.TextChannel, embed: discord.Embed,
     last_message_id, last_updated = _state_get(conn, channel.id)
     now = int(time.time())
     if last_updated and now - last_updated < config.WATCH_BALANCE_MIN_UPDATE_SECS:
+        logger.debug(
+            "Skipping update: only %d seconds since last update (minimum: %d)",
+            now - last_updated, config.WATCH_BALANCE_MIN_UPDATE_SECS
+        )
         return
 
     if last_message_id:
@@ -588,6 +592,7 @@ async def send_or_edit_embed(channel: discord.TextChannel, embed: discord.Embed,
             message = await channel.fetch_message(last_message_id)
             await message.edit(embed=embed)
             _state_set(conn, channel.id, message.id, now)
+            logger.info("Updated existing embed message (ID: %s)", last_message_id)
             return
         except discord.NotFound:
             logger.info("Previous message not found, sending a new one.")
@@ -598,6 +603,7 @@ async def send_or_edit_embed(channel: discord.TextChannel, embed: discord.Embed,
 
     message = await channel.send(embed=embed)
     _state_set(conn, channel.id, message.id, now)
+    logger.info("Sent new embed message (ID: %s)", message.id)
 
 
 async def watch_balance_loop(client: discord.Client, conn: sqlite3.Connection) -> None:
