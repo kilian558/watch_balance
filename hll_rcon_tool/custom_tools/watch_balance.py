@@ -246,8 +246,18 @@ def _normalize_team_value(value: str) -> str:
 
 
 def _normalize_players(players_payload) -> list:
+    # Handle CRCON API response structure: {'result': {'players': {...}}, ...}
     if isinstance(players_payload, dict):
+        # First extract 'result' if it exists
+        if "result" in players_payload:
+            players_payload = players_payload["result"]
+        
+        # Then extract 'players'
         players = players_payload.get("players", [])
+        
+        # If players is a dict (player_id -> player_data), convert to list
+        if isinstance(players, dict):
+            players = list(players.values())
     else:
         players = players_payload
 
@@ -305,31 +315,10 @@ def fetch_team_view_stats() -> tuple[list, list]:
     team_view_payload = _api_get(config.RCON_API_TEAM_ENDPOINT)
     players_payload = _api_get(config.RCON_API_PLAYERS_ENDPOINT)
     
-    logger.debug("Raw team_view_payload type: %s", type(team_view_payload))
-    logger.debug("Raw players_payload type: %s", type(players_payload))
-    
-    # Log the actual API responses to understand the structure
-    if isinstance(players_payload, dict):
-        logger.warning("Players payload is a dict with keys: %s", list(players_payload.keys()))
-        # Show a sample of the data
-        for key in list(players_payload.keys())[:5]:
-            val = players_payload[key]
-            if isinstance(val, list):
-                logger.warning("  %s: list with %d items", key, len(val))
-                if val:
-                    logger.warning("    First item type: %s, sample: %s", type(val[0]), str(val[0])[:200])
-            else:
-                logger.warning("  %s: %s = %s", key, type(val), str(val)[:100])
-    
     all_teams = _normalize_teams(_api_result(team_view_payload))
     all_players = _normalize_players(_api_result(players_payload))
     
     logger.info("Fetched %d teams and %d players from API", len(all_teams), len(all_players))
-    if all_players:
-        sample_player = all_players[0] if all_players else None
-        logger.debug("Sample player data: %s", sample_player)
-    else:
-        logger.warning("No players returned! Raw result type: %s", type(_api_result(players_payload)))
     
     return all_teams, all_players
 
