@@ -651,7 +651,14 @@ async def run_bot() -> None:
 
 # Launching and running (infinite loop)
 if __name__ == "__main__":
+    # Configure logging for direct execution
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    
     # Initial pause : wait to be sure the CRCON is fully started
+    logger.info("Starting %s - waiting 60 seconds...", config.BOT_NAME)
     sleep(60)
     logger.info(
         "\n-------------------------------------------------------------------------------\n"
