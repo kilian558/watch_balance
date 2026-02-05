@@ -25,9 +25,22 @@ from urllib.request import Request, urlopen
 
 import discord
 
-from . import common_functions
-from .common_translations import TRANSL
-from . import watch_balance_config as config
+# Handle both direct execution and module execution
+if __name__ == "__main__":
+    # Direct execution - add parent directory to path
+    import sys
+    import pathlib
+    ROOT_DIR = pathlib.Path(__file__).resolve().parents[2]
+    if str(ROOT_DIR) not in sys.path:
+        sys.path.insert(0, str(ROOT_DIR))
+    from hll_rcon_tool.custom_tools import common_functions
+    from hll_rcon_tool.custom_tools.common_translations import TRANSL
+    from hll_rcon_tool.custom_tools import watch_balance_config as config
+else:
+    # Module execution - use relative imports
+    from . import common_functions
+    from .common_translations import TRANSL
+    from . import watch_balance_config as config
 
 logger = logging.getLogger("rcon")
 
