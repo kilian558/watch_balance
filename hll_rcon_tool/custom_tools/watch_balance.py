@@ -609,6 +609,7 @@ async def send_or_edit_embed(channel: discord.TextChannel, embed: discord.Embed,
 async def watch_balance_loop(client: discord.Client, conn: sqlite3.Connection) -> None:
     while True:
         try:
+            logger.debug("=== Starting new watch cycle ===")
             if not config.RCON_API_BASE_URL:
                 logger.info("RCON_API_BASE_URL not set, skipping this cycle.")
                 await asyncio.sleep(config.WATCH_INTERVAL_SECS)
@@ -617,8 +618,10 @@ async def watch_balance_loop(client: discord.Client, conn: sqlite3.Connection) -
                 logger.info("DISCORD_CHANNEL_ID not set, skipping this cycle.")
                 await asyncio.sleep(config.WATCH_INTERVAL_SECS)
                 continue
+            logger.debug("Fetching data from API...")
             loop = asyncio.get_running_loop()
             all_teams, all_players = await loop.run_in_executor(None, fetch_team_view_stats)
+            logger.debug("Data received from API")
             if len(all_teams) < 2:
                 logger.info(
                     "Less than 2 teams ingame. Waiting for %s mins...",
@@ -627,16 +630,21 @@ async def watch_balance_loop(client: discord.Client, conn: sqlite3.Connection) -
                 await asyncio.sleep(config.WATCH_INTERVAL_SECS)
                 continue
 
+            logger.debug("Building embed...")
             embed = build_embed(all_teams, all_players)
             if embed is None:
+                logger.warning("Embed is None, skipping update")
                 await asyncio.sleep(config.WATCH_INTERVAL_SECS)
                 continue
 
+            logger.debug("Getting Discord channel...")
             channel = client.get_channel(config.DISCORD_CHANNEL_ID)
             if channel is None:
                 channel = await client.fetch_channel(config.DISCORD_CHANNEL_ID)
 
+            logger.debug("Sending/editing embed...")
             await send_or_edit_embed(channel, embed, conn)
+            logger.debug("=== Cycle complete, sleeping for %s seconds ===", config.WATCH_INTERVAL_SECS)
         except Exception:
             logger.exception("Watch balance loop failure.")
 
