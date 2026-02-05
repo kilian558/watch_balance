@@ -11,20 +11,27 @@ It posts a single embed per channel and edits it on updates to avoid spam.
 
 ## Setup
 1) Install dependencies used by your CRCON environment.
-2) Configure environment variables for each server (see `.env.example`).
-3) Start with PM2 or run the script directly.
+2) Copy `.env.example` to `.env`: `cp .env.example .env`
+3) Edit `.env` and configure your Discord bot token, RCON API credentials, and server URLs.
+4) Make the start script executable: `chmod +x start.sh reload.sh`
+5) Start with PM2 using the provided script.
 
 ## PM2 (recommended)
-Edit `ecosystem.config.js` and replace the placeholders.
+The `.env` file contains your configuration. PM2 requires environment variables to be loaded before starting.
 
 Start:
 ```bash
-pm2 start ecosystem.config.js
+./start.sh
 ```
 
 Reload after changes:
 ```bash
-pm2 reload ecosystem.config.js
+./reload.sh
+```
+
+Stop:
+```bash
+pm2 stop ecosystem.config.js
 ```
 
 ## Environment variables
