@@ -1,4 +1,4 @@
-"""
+﻿"""
 watch_balance.py
 
 A plugin for HLL CRCON (https://github.com/MarechJ/hll_rcon_tool)
@@ -449,13 +449,13 @@ def build_embed(all_teams: list, all_players: list) -> Optional[discord.Embed]:
     col1_embed_title = f"📍 {TRANSL['stats'][config.LANG]}"
     transl_tot_moy = f"({TRANSL['tot'][config.LANG]}/{TRANSL['avg'][config.LANG]})"
     col1_embed_text = (
-        f"👥 {TRANSL['players'][config.LANG]}\n\n"
-        f"⚔️ {TRANSL['kills'][config.LANG]} {transl_tot_moy}\n"
-        f"💀 {TRANSL['deaths'][config.LANG]} {transl_tot_moy}\n\n"
-        f"🎯 {TRANSL['combat'][config.LANG]} {transl_tot_moy}\n"
-        f"⚡ {TRANSL['offense'][config.LANG]} {transl_tot_moy}\n"
-        f"🛡️ {TRANSL['defense'][config.LANG]} {transl_tot_moy}\n"
-        f"🏥 {TRANSL['support'][config.LANG]} {transl_tot_moy}"
+        f"{TRANSL['players'][config.LANG]}\n\n"
+        f"{TRANSL['kills'][config.LANG]} {transl_tot_moy}\n"
+        f"{TRANSL['deaths'][config.LANG]} {transl_tot_moy}\n\n"
+        f"{TRANSL['combat'][config.LANG]} {transl_tot_moy}\n"
+        f"{TRANSL['offense'][config.LANG]} {transl_tot_moy}\n"
+        f"{TRANSL['defense'][config.LANG]} {transl_tot_moy}\n"
+        f"{TRANSL['support'][config.LANG]} {transl_tot_moy}"
     )
 
     # col2
