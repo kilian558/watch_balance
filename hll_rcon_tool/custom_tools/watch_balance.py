@@ -9,11 +9,22 @@ Source : https://github.com/ElGuillermo
 Feel free to use/modify/distribute, as long as you keep this note in your code
 """
 
+# Load .env file if running directly
+import os
+import pathlib
+if __name__ == "__main__":
+    env_path = pathlib.Path(__file__).resolve().parents[2] / ".env"
+    if env_path.exists():
+        with open(env_path) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, value = line.split('=', 1)
+                    os.environ.setdefault(key.strip(), value.strip())
+
 import asyncio
 import json
 import logging
-import os
-import pathlib
 import sqlite3
 import ssl
 import time
