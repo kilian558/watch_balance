@@ -1,3 +1,31 @@
+// Load .env file
+const fs = require('fs');
+const path = require('path');
+
+function loadEnv() {
+  const envPath = path.join(__dirname, '.env');
+  if (!fs.existsSync(envPath)) {
+    console.warn('Warning: .env file not found. Using system environment variables.');
+    return;
+  }
+  
+  const envContent = fs.readFileSync(envPath, 'utf8');
+  envContent.split('\n').forEach(line => {
+    line = line.trim();
+    if (line && !line.startsWith('#')) {
+      const [key, ...valueParts] = line.split('=');
+      if (key && valueParts.length > 0) {
+        const value = valueParts.join('=').trim();
+        if (!process.env[key]) {
+          process.env[key] = value;
+        }
+      }
+    }
+  });
+}
+
+loadEnv();
+
 module.exports = {
   apps: [
     {
