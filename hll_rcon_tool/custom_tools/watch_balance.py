@@ -15,6 +15,7 @@ import logging
 import os
 import pathlib
 import sqlite3
+import ssl
 import time
 import sys
 from datetime import datetime, timezone
@@ -189,8 +190,14 @@ def _api_get(endpoint: str) -> dict:
     base_url = config.RCON_API_BASE_URL.rstrip("/")
     url = f"{base_url}/api/{endpoint}"
     request = Request(url, headers=_api_headers(), method="GET")
+    
+    # Create SSL context that doesn't verify certificates
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+    
     try:
-        with urlopen(request, timeout=config.RCON_API_TIMEOUT_SECS) as response:
+        with urlopen(request, timeout=config.RCON_API_TIMEOUT_SECS, context=ssl_context) as response:
             payload = response.read().decode("utf-8")
         return json.loads(payload)
     except (HTTPError, URLError, json.JSONDecodeError) as exc:
