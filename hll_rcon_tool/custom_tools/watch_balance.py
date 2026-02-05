@@ -408,11 +408,11 @@ def build_embed(all_teams: list, all_players: list) -> Optional[discord.Embed]:
 
     # Discord embed title
     avg_diff_ratio = max(t1_lvl_avg, t2_lvl_avg) / min(t1_lvl_avg, t2_lvl_avg)
-    embed_title = f"{TRANSL['ratio'][config.LANG]} : {str(round(avg_diff_ratio, 2))}"
+    embed_title = f"⚖️ {TRANSL['ratio'][config.LANG]} : {str(round(avg_diff_ratio, 2))}"
 
     # Average level (all players) : title
     all_lvl_avg = (t1_lvl_avg + t2_lvl_avg) / 2
-    all_lvl_avg_title = f"{TRANSL['level'][config.LANG]} ({TRANSL['avg'][config.LANG]}) : {round(all_lvl_avg)}"
+    all_lvl_avg_title = f"📊 {TRANSL['level'][config.LANG]} ({TRANSL['avg'][config.LANG]}) : {round(all_lvl_avg)}"
 
     all_lvl_graph = level_cursor(
         t1_lvl_avg=t1_lvl_avg,
@@ -426,7 +426,7 @@ def build_embed(all_teams: list, all_players: list) -> Optional[discord.Embed]:
             / (t1_officers_count + t2_officers_count)
         )
         all_officers_lvl_avg_title = (
-            f"{TRANSL['level'][config.LANG]} {TRANSL['officers'][config.LANG]} "
+            f"👑 {TRANSL['level'][config.LANG]} {TRANSL['officers'][config.LANG]} "
             f"({TRANSL['avg'][config.LANG]}) : {round(all_officers_lvl_avg)}"
         )
 
@@ -436,7 +436,7 @@ def build_embed(all_teams: list, all_players: list) -> Optional[discord.Embed]:
         )
 
     # level population : title
-    all_lvl_pop_title = f"{TRANSL['level'][config.LANG]} {TRANSL['distribution'][config.LANG]}"
+    all_lvl_pop_title = f"📈 {TRANSL['level'][config.LANG]} {TRANSL['distribution'][config.LANG]}"
 
     # Teams stats
     all_lvl_pop_text = level_pop_distribution(
@@ -446,16 +446,16 @@ def build_embed(all_teams: list, all_players: list) -> Optional[discord.Embed]:
     )
 
     # col1
-    col1_embed_title = f"{TRANSL['stats'][config.LANG]}"
+    col1_embed_title = f"📍 {TRANSL['stats'][config.LANG]}"
     transl_tot_moy = f"({TRANSL['tot'][config.LANG]}/{TRANSL['avg'][config.LANG]})"
     col1_embed_text = (
-        f"{TRANSL['players'][config.LANG]}\n\n"
-        f"{TRANSL['kills'][config.LANG]} {transl_tot_moy}\n"
-        f"{TRANSL['deaths'][config.LANG]} {transl_tot_moy}\n\n"
-        f"{TRANSL['combat'][config.LANG]} {transl_tot_moy}\n"
-        f"{TRANSL['offense'][config.LANG]} {transl_tot_moy}\n"
-        f"{TRANSL['defense'][config.LANG]} {transl_tot_moy}\n"
-        f"{TRANSL['support'][config.LANG]} {transl_tot_moy}"
+        f"👥 {TRANSL['players'][config.LANG]}\n\n"
+        f"⚔️ {TRANSL['kills'][config.LANG]} {transl_tot_moy}\n"
+        f"💀 {TRANSL['deaths'][config.LANG]} {transl_tot_moy}\n\n"
+        f"🎯 {TRANSL['combat'][config.LANG]} {transl_tot_moy}\n"
+        f"⚡ {TRANSL['offense'][config.LANG]} {transl_tot_moy}\n"
+        f"🛡️ {TRANSL['defense'][config.LANG]} {transl_tot_moy}\n"
+        f"🏥 {TRANSL['support'][config.LANG]} {transl_tot_moy}"
     )
 
     # col2
@@ -468,7 +468,7 @@ def build_embed(all_teams: list, all_players: list) -> Optional[discord.Embed]:
     t1_support_str, t2_support_str = common_functions.bold_the_highest(t1_support, t2_support)
 
     # col2
-    col2_embed_title = TRANSL["allies"][config.LANG]
+    col2_embed_title = f"🔵 {TRANSL['allies'][config.LANG]}"
     col2_embed_text = (
         f"{str(t1_count)}\n\n"
         f"{t1_kills_str} / {str(round(team_avg(all_players, 'allies', 'kills', t1_count)))}\n"
@@ -480,7 +480,7 @@ def build_embed(all_teams: list, all_players: list) -> Optional[discord.Embed]:
     )
 
     # col3
-    col3_embed_title = TRANSL["axis"][config.LANG]
+    col3_embed_title = f"🔴 {TRANSL['axis'][config.LANG]}"
     col3_embed_text = (
         f"{str(t2_count)}\n\n"
         f"{t2_kills_str} / {str(round(team_avg(all_players, 'axis', 'kills', t2_count)))}\n"
