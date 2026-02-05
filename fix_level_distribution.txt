@@ -1,0 +1,65 @@
+def level_pop_distribution(
+    all_players: list,
+    t1_count: int,
+    t2_count: int,
+    slots_tot: int = 36  # Prefer a pair value, or the 'middle pin' won't be in middle
+) -> str:
+    """
+    returns a multilines (5) string representing a graph of level tiers
+    """
+    if t1_count == 0 or t2_count == 0:
+        return "`No data`"
+
+    t1_l1_count: int = sum(1 for player in all_players if player["team"] == "allies" and 1 <= player["level"] < 30)
+    t1_l2_count: int = sum(1 for player in all_players if player["team"] == "allies" and 30 <= player["level"] < 60)
+    t1_l3_count: int = sum(1 for player in all_players if player["team"] == "allies" and 60 <= player["level"] < 125)
+    t1_l4_count: int = sum(1 for player in all_players if player["team"] == "allies" and 125 <= player["level"] < 250)
+    t1_l5_count: int = sum(1 for player in all_players if player["team"] == "allies" and 250 <= player["level"] <= 500)
+
+    t1_l1_slots: int = round((t1_l1_count * slots_tot) / (2 * t1_count))
+    t1_l2_slots: int = round((t1_l2_count * slots_tot) / (2 * t1_count))
+    t1_l3_slots: int = round((t1_l3_count * slots_tot) / (2 * t1_count))
+    t1_l4_slots: int = round((t1_l4_count * slots_tot) / (2 * t1_count))
+    t1_l5_slots: int = round((t1_l5_count * slots_tot) / (2 * t1_count))
+
+    t2_l1_count: int = sum(1 for player in all_players if player["team"] == "axis" and 1 <= player["level"] < 30)
+    t2_l2_count: int = sum(1 for player in all_players if player["team"] == "axis" and 30 <= player["level"] < 60)
+    t2_l3_count: int = sum(1 for player in all_players if player["team"] == "axis" and 60 <= player["level"] < 125)
+    t2_l4_count: int = sum(1 for player in all_players if player["team"] == "axis" and 125 <= player["level"] < 250)
+    t2_l5_count: int = sum(1 for player in all_players if player["team"] == "axis" and 250 <= player["level"] <= 500)
+
+    t2_l1_slots: int = round((t2_l1_count * slots_tot) / (2 * t2_count))
+    t2_l2_slots: int = round((t2_l2_count * slots_tot) / (2 * t2_count))
+    t2_l3_slots: int = round((t2_l3_count * slots_tot) / (2 * t2_count))
+    t2_l4_slots: int = round((t2_l4_count * slots_tot) / (2 * t2_count))
+    t2_l5_slots: int = round((t2_l5_count * slots_tot) / (2 * t2_count))
+
+    return_str = (
+        # level 5
+        f"`250-500: {t1_l5_count:>2} {round((t1_l5_count * 100) / t1_count):>3}%"
+        f" [{round((slots_tot / 2) - t1_l5_slots) * ' '}{t1_l5_slots * '█'}"
+        f"|{t2_l5_slots * '█'}{round((slots_tot / 2) - t2_l5_slots) * ' '}]"
+        f" {t2_l5_count:>2} {round((t2_l5_count * 100) / t2_count):>3}%`\n"
+        # level 4
+        f"`125-249: {t1_l4_count:>2} {round((t1_l4_count * 100) / t1_count):>3}%"
+        f" [{round((slots_tot / 2) - t1_l4_slots) * ' '}{t1_l4_slots * '█'}"
+        f"|{t2_l4_slots * '█'}{round((slots_tot / 2) - t2_l4_slots) * ' '}]"
+        f" {t2_l4_count:>2} {round((t2_l4_count * 100) / t2_count):>3}%`\n"
+        # level 3
+        f"` 60-124: {t1_l3_count:>2} {round((t1_l3_count * 100) / t1_count):>3}%"
+        f" [{round((slots_tot / 2) - t1_l3_slots) * ' '}{t1_l3_slots * '█'}"
+        f"|{t2_l3_slots * '█'}{round((slots_tot / 2) - t2_l3_slots) * ' '}]"
+        f" {t2_l3_count:>2} {round((t2_l3_count * 100) / t2_count):>3}%`\n"
+        # level 2
+        f"` 30- 59: {t1_l2_count:>2} {round((t1_l2_count * 100) / t1_count):>3}%"
+        f" [{round((slots_tot / 2) - t1_l2_slots) * ' '}{t1_l2_slots * '█'}"
+        f"|{t2_l2_slots * '█'}{round((slots_tot / 2) - t2_l2_slots) * ' '}]"
+        f" {t2_l2_count:>2} {round((t2_l2_count * 100) / t2_count):>3}%`\n"
+        # level 1
+        f"`  1- 29: {t1_l1_count:>2} {round((t1_l1_count * 100) / t1_count):>3}%"
+        f" [{round((slots_tot / 2) - t1_l1_slots) * ' '}{t1_l1_slots * '█'}"
+        f"|{t2_l1_slots * '█'}{round((slots_tot / 2) - t2_l1_slots) * ' '}]"
+        f" {t2_l1_count:>2} {round((t2_l1_count * 100) / t2_count):>3}%`"
+    )
+
+    return return_str
