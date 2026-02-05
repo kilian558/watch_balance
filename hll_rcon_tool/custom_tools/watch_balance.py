@@ -306,6 +306,12 @@ def fetch_team_view_stats() -> tuple[list, list]:
     players_payload = _api_get(config.RCON_API_PLAYERS_ENDPOINT)
     all_teams = _normalize_teams(_api_result(team_view_payload))
     all_players = _normalize_players(_api_result(players_payload))
+    
+    logger.info("Fetched %d teams and %d players from API", len(all_teams), len(all_players))
+    if all_players:
+        sample_player = all_players[0] if all_players else None
+        logger.debug("Sample player data: %s", sample_player)
+    
     return all_teams, all_players
 
 
@@ -356,9 +362,12 @@ def build_embed(all_teams: list, all_players: list) -> Optional[discord.Embed]:
 
     if t1_lvl_avg == 0 or t2_lvl_avg == 0:
         logger.info(
-            "Bad data : either Allies or Axis average level is 0. Waiting for %s mins...",
+            "Bad data : either Allies or Axis average level is 0. "
+            "Allies avg: %s (%d players), Axis avg: %s (%d players). Waiting for %s mins...",
+            t1_lvl_avg, t1_count, t2_lvl_avg, t2_count,
             round((config.WATCH_INTERVAL_SECS / 60), 2)
         )
+        logger.debug("All players data: %s", all_players[:5] if all_players else "empty")
         return None
 
     if t1_count == 0 or t2_count == 0:
