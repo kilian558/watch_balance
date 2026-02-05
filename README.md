@@ -1,70 +1,49 @@
-# HLL_CRCON_Discord_watch_balance
-A plugin for Hell Let Loose (HLL) CRCON (see : https://github.com/MarechJ/hll_rcon_tool)
-that watches the teams players levels and display a report in a dedicated Discord channel.
+# watch_balance
 
-![375489638-1b9f8fec-7f27-49a0-a4a7-a825fbbf174b](https://github.com/user-attachments/assets/2357b6a2-3a79-492b-8d9c-c1aaff9abf33)
+Discord bot that monitors team balance on Hell Let Loose servers using the CRCON HTTP API.
+It posts a single embed per channel and edits it on updates to avoid spam.
 
-## Install
+## Requirements
+- Python 3.9+
+- CRCON API reachable for each server
+- Discord bot token and channel IDs
+- PM2 (optional, for process management and scheduled restarts)
 
-> [!NOTE]
-> The shell commands given below assume your CRCON is installed in `/root/hll_rcon_tool`.  
-> You may have installed your CRCON in a different folder.  
->   
-> Some Ubuntu Linux distributions disable the `root` user and `/root` folder by default.  
-> In these, your default user is `ubuntu`, using the `/home/ubuntu` folder.  
-> You should then find your CRCON in `/home/ubuntu/hll_rcon_tool`.  
->   
-> If so, you'll have to adapt the commands below accordingly.
+## Setup
+1) Install dependencies used by your CRCON environment.
+2) Configure environment variables for each server (see `.env.example`).
+3) Start with PM2 or run the script directly.
 
-- Log into your CRCON host machine using SSH and enter these commands (one line at at time) :  
+## PM2 (recommended)
+Edit `ecosystem.config.js` and replace the placeholders.
 
-  First part  
-  If you already have installed any other "custom tools" from ElGuillermo, you can skip this part.  
-  (though it's always a good idea to redownload the files, as they could have been updated)
-  ```shell
-  cd /root/hll_rcon_tool
-  wget https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_restart/refs/heads/main/restart.sh
-  mkdir custom_tools
-  cd custom_tools
-  wget https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_custom_common_functions.py/refs/heads/main/common_functions.py
-  wget https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_custom_common_translations.py/refs/heads/main/common_translations.py
-  ```
-  Second part
-  ```shell
-  cd /root/hll_rcon_tool/custom_tools
-  wget https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_Discord_watch_balance/refs/heads/main/hll_rcon_tool/custom_tools/watch_balance.py
-  wget https://raw.githubusercontent.com/ElGuillermo/HLL_CRCON_Discord_watch_balance/refs/heads/main/hll_rcon_tool/custom_tools/watch_balance_config.py
-- Edit `/root/hll_rcon_tool/config/supervisord.conf` to add this bot section : 
-  ```conf
-  [program:watch_balance]
-  command=python -m custom_tools.watch_balance
-  environment=LOGGING_FILENAME=watch_balance_%(ENV_SERVER_NUMBER)s.log
-  startretries=100
-  startsecs=10
-  autostart=true
-  autorestart=true
-  ```
-
-## Config
-- Edit `/root/hll_rcon_tool/custom_tools/watch_balance_config.py` and set the parameters to fit your needs.
-- Restart CRCON :
-  ```shell
-  cd /root/hll_rcon_tool
-  sh ./restart.sh
-  ```
-
-## Limitations
-⚠️ Any change to these files requires a CRCON rebuild and restart (using the `restart.sh` script) to be taken in account :
-- `/root/hll_rcon_tool/custom_tools/common_functions.py`
-- `/root/hll_rcon_tool/custom_tools/common_translations.py`
-- `/root/hll_rcon_tool/custom_tools/watch_balance.py`
-- `/root/hll_rcon_tool/custom_tools/watch_balance_config.py`
-
-⚠️ This plugin requires a modification of the `/root/hll_rcon_tool/config/supervisord.conf` file, which originates from the official CRCON depot.  
-If any CRCON upgrade implies updating this file, the usual upgrade procedure, as given in official CRCON instructions, will **FAIL**.  
-To successfully upgrade your CRCON, you'll have to revert the changes back, then reinstall this plugin.  
-To revert to the original file :  
-```shell
-cd /root/hll_rcon_tool
-git restore config/supervisord.conf
+Start:
+```bash
+pm2 start ecosystem.config.js
 ```
+
+Reload after changes:
+```bash
+pm2 reload ecosystem.config.js
+```
+
+## Environment variables
+Per server:
+- `RCON_API_BASE_URL` (example: `https://gbg-hll.com:64301`)
+- `RCON_API_TOKEN`
+- `DISCORD_BOT_TOKEN`
+- `DISCORD_CHANNEL_ID`
+
+Optional:
+- `RCON_API_TOKEN_HEADER` (default: `Authorization`)
+- `RCON_API_TOKEN_PREFIX` (default: `Bearer`)
+- `RCON_API_TEAM_ENDPOINT` (default: `get_team_view`)
+- `RCON_API_PLAYERS_ENDPOINT` (default: `get_detailed_players`)
+- `RCON_API_TIMEOUT_SECS` (default: `15`)
+- `WATCH_BALANCE_INTERVAL_SECS` (default: `300`)
+- `WATCH_BALANCE_MIN_UPDATE_SECS` (default: `300`)
+- `WATCH_BALANCE_DB_PATH` (per server, to keep a single message across restarts)
+
+## Notes
+- If `RCON_API_BASE_URL` or `DISCORD_CHANNEL_ID` is empty for a server, that process will skip updates and continue running.
+- The PM2 config includes a daily restart at 04:30. The bot reuses the same message ID from its DB, so you still have only one message in the channel.
