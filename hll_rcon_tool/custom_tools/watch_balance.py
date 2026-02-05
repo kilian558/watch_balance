@@ -16,6 +16,7 @@ import os
 import pathlib
 import sqlite3
 import time
+import sys
 from datetime import datetime, timezone
 from time import sleep
 from typing import Optional, Tuple
@@ -23,6 +24,10 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 import discord
+
+ROOT_DIR = pathlib.Path(__file__).resolve().parents[1]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
 
 import custom_tools.common_functions as common_functions
 from custom_tools.common_translations import TRANSL
