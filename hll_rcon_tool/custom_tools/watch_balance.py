@@ -25,13 +25,9 @@ from urllib.request import Request, urlopen
 
 import discord
 
-ROOT_DIR = pathlib.Path(__file__).resolve().parents[1]
-if str(ROOT_DIR) not in sys.path:
-    sys.path.insert(0, str(ROOT_DIR))
-
-import custom_tools.common_functions as common_functions
-from custom_tools.common_translations import TRANSL
-import custom_tools.watch_balance_config as config
+from . import common_functions
+from .common_translations import TRANSL
+from . import watch_balance_config as config
 
 logger = logging.getLogger("rcon")
 
